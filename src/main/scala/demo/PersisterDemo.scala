@@ -140,5 +140,15 @@ object InMemoryDomainObjectConfig {
  * Main class to try things out.
  */
 object Demo {
-  def main(args:Array[String]) { print("hello")}
+  def main(args:Array[String]) {
+    print("hello")
+    val domainObjectClient = Config.domainObjectClient
+    domainObjectClient.add(DomainObject("name1",1))
+    domainObjectClient.add(DomainObject("name2",2))
+    val result = domainObjectClient.getByName("name1")
+    println("result: " + result)
+    val domainObjectClientFileBased = new DomainObjectClient(FileBasedDomainObjectConfig)
+    val objectFromFile = domainObjectClientFileBased.getByName("filename2")
+    println("from file: " + objectFromFile)
+  }
 }
