@@ -12,5 +12,6 @@ package demo
  * Or should it be an trait with a bunch of implementations that can be chosen on the command line?
  */
 object Config {
-  val domainObjectClient = new DomainObjectClient(InMemoryDomainObjectConfig)
+  var domainObjectClient = new DomainObjectClient(FileBasedDomainObjectConfig)
+  def reload:Unit = { domainObjectClient = new DomainObjectClient(FileBasedDomainObjectConfig) }
 }
