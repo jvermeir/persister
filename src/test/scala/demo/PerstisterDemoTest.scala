@@ -4,9 +4,24 @@ import org.junit.runner.RunWith
 import org.scalatest.junit.JUnitRunner
 import org.scalatest.{GivenWhenThen, FeatureSpec}
 import org.scalatest.matchers.MustMatchers
+import org.junit.Before
+import java.io.File
+import org.apache.commons.io.FileUtils
+import scala.collection.mutable.Map
 
 @RunWith(classOf[JUnitRunner])
 class PerstisterDemoTest extends FeatureSpec with GivenWhenThen with MustMatchers {
+
+  @Before
+  def setup= {
+    val dataFile = new File(FileBasedDomainObjectConfig.domainObjectDatabaseFileName)
+    FileUtils.writeStringToFile(dataFile, "")
+    val domainObjects = Map("name1" -> DomainObject("name1","1(from file)"),"name2" -> DomainObject("name2","2(from file)"))
+    for (domainObject <- domainObjects) {
+      FileUtils.writeStringToFile(dataFile, domainObject._2.printAsDataStoreString +"\n", true)
+    }
+    Config.reload
+  }
 
   feature("Implemenations of a data store can be configured at runtime") {
     info("As a developer")
@@ -15,6 +30,7 @@ class PerstisterDemoTest extends FeatureSpec with GivenWhenThen with MustMatcher
 
     scenario("DomainObjects can be compared") {
       Given("a bunch of domain objects")
+      setup
       val d1 = DomainObject("n1", "v1")
       val d2equalsd1 = DomainObject("n1", "v1")
       val d3 = DomainObject("n2", "v1")
@@ -28,8 +44,8 @@ class PerstisterDemoTest extends FeatureSpec with GivenWhenThen with MustMatcher
       d4 must be < d3
     }
     scenario("The default implementation of a dependency works for the default use case") {
-      Config.reload
       Given("a default DomainObjectClient")
+      setup
       val domainObjectClient = Config.domainObjectClient
       When("we search for 'name1'")
       val domainObject = domainObjectClient.getByName("name1")
@@ -39,8 +55,8 @@ class PerstisterDemoTest extends FeatureSpec with GivenWhenThen with MustMatcher
     }
 
     scenario("The implementation can be switched to a in memory version easily by changing the Config object") {
-      Config.reload
       Given("a DomainObjectClient with a InMemoryDomainObjectRepository")
+      setup
       Config.domainObjectClient = new DomainObjectClient(InMemoryDomainObjectConfig)
       val domainObjectClient = Config.domainObjectClient
       domainObjectClient.add(DomainObject("name1","1(from memory)"))
@@ -53,8 +69,8 @@ class PerstisterDemoTest extends FeatureSpec with GivenWhenThen with MustMatcher
     }
 
     scenario("And all this also works if the DomainObject is accessed through 2 layers of objects") {
-      Config.reload
       Given("a ThirdLevelClient with a default repository")
+      setup
       val t = new ThirdLevelClient
       val domainObject = t.getByName("name1")
       val expected: DomainObject = DomainObject("name1", "[FileBasedDomainObjectRepository] 1(from file)")
