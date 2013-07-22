@@ -12,7 +12,6 @@ import scala.collection.mutable.Map
 @RunWith(classOf[JUnitRunner])
 class PerstisterDemoTest extends FeatureSpec with GivenWhenThen with MustMatchers {
 
-  @Before
   def setup= {
     val dataFile = new File(FileBasedDomainObjectConfig.domainObjectDatabaseFileName)
     FileUtils.writeStringToFile(dataFile, "")
@@ -23,26 +22,6 @@ class PerstisterDemoTest extends FeatureSpec with GivenWhenThen with MustMatcher
     Config.reload
   }
 
-  feature("Implemenations of a data store can be configured at runtime") {
-    info("As a developer")
-    info("I want to be able to configure dependencies in a easy to manage way")
-    info("So I can change them for a test.")
-
-    scenario("DomainObjects can be compared") {
-      Given("a bunch of domain objects")
-      setup
-      val d1 = DomainObject("n1", "v1")
-      val d2equalsd1 = DomainObject("n1", "v1")
-      val d3 = DomainObject("n2", "v1")
-      val d4 = DomainObject("n", "v1")
-      When("they are compared to each other")
-      Then("we get results that make sense...")
-      d1 must be === d2equalsd1
-      d1 must be === d1
-      d3 must be > d1
-      d4 must be < d1
-      d4 must be < d3
-    }
     scenario("The default implementation of a dependency works for the default use case") {
       Given("a default DomainObjectClient")
       setup
