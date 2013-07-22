@@ -71,25 +71,3 @@ class PerstisterDemoTest extends FeatureSpec with GivenWhenThen with MustMatcher
     }
   }
 }
-  /*
-     println("First use Config to get the current DomainObjectClient. Using Config allows us to switch " +
-      "implementations at will. The default implementation is InMemoryDomainObjectRepository")
-    val domainObjectClient = Config.domainObjectClient
-    domainObjectClient.add(DomainObject("name1","1(from memory)"))
-    domainObjectClient.add(DomainObject("name2","2(from memory)"))
-    val result = domainObjectClient.getByName("name1")
-    println("result: " + result)
-    println("\nNow use ThirdLevelClient to get the domainObject. This will be done by accessing the in memory datastore")
-    val client:ThirdLevelClient = new ThirdLevelClient()
-    val resultViaThirdLevelClient = client.getByName("name1")
-    println("result: " + resultViaThirdLevelClient)
-
-    println("\nNow switch ObjectClient implementations by changing the Config object")
-    Config.domainObjectClient = new DomainObjectClient(FileBasedDomainObjectConfig)
-    val secondResultViaThirdLevelClient = client.getByName("name1")
-    println("result: " + secondResultViaThirdLevelClient)
-
-       intercept[PanicException] {
-      }
-
-   */
