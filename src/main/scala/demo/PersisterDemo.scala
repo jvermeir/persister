@@ -30,7 +30,7 @@ trait DomainObjectRepository {
   def getByName(name: String): DomainObject = {
     val domainObject = domainObjects.get(name)
     domainObject.map {
-      p => p
+      p => earMarkInstance(p)
     } getOrElse (throw new TotalPanicException("domainObject object named " + name + " not found"))
   }
 
