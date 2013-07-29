@@ -68,4 +68,19 @@ class PerstisterDemoTest extends FeatureSpec with GivenWhenThen with MustMatcher
     val newExpected: DomainObject = DomainObject("name1", "[InMemoryDomainObjectRepository] 1(from memory)")
     newExpected must be === newDomainObject
   }
+
+  scenario("Data from a file should be loaded only on demand") {
+    Given("a Config with a FileBasedDomainObjectRepository for a file that doesn't exits")
+    FileBasedDomainObjectConfig.domainObjectDatabaseFileName="/thisFileDoesn'tExist.txt"
+    Config.domainObjectRepository = new FileBasedDomainObjectRepository
+    When("the repository is accessed")
+    Then("we get an exception, but not earlier")
+    val exceptionWasThrown = try {
+      Config.reload
+      false
+    } catch {
+      case _ : Throwable => true
+    }
+    exceptionWasThrown must be === true
+  }
 }

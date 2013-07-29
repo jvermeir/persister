@@ -6,6 +6,11 @@ package demo2
  */
 object Config {
 
-  var domainObjectRepository:DomainObjectRepository = new FileBasedDomainObjectRepository
-  def reload:Unit = domainObjectRepository.reload
+  var domainObjectRepository: DomainObjectRepository = new FileBasedDomainObjectRepository
+
+  def reload: Unit = domainObjectRepository.reload
+}
+
+object FileBasedDomainObjectConfig {
+  var domainObjectDatabaseFileName = "data/domainObjectDatabase.csv"
 }

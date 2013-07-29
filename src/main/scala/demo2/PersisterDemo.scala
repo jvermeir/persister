@@ -78,7 +78,7 @@ class InMemoryDomainObjectRepository extends DomainObjectRepository {
  */
 
 class FileBasedDomainObjectRepository extends DomainObjectRepository {
-  override val domainObjects = loadDomainObjectsFromFile
+  override lazy val domainObjects = loadDomainObjectsFromFile
 
   private def loadDomainObjectsFromFile: Map[String, DomainObject] = {
     val domainObjectsAsText = FileUtils.readFileToString(new File(FileBasedDomainObjectConfig.domainObjectDatabaseFileName))
@@ -129,23 +129,6 @@ class FileBasedDomainObjectRepository extends DomainObjectRepository {
 
   protected[demo2] override def earMarkInstance(domainObject: DomainObject): DomainObject = new DomainObject(domainObject.name, "[FileBasedDomainObjectRepository] " + domainObject.value)
 
-}
-
-/**
- * FileBasedDomainObjectConfig is used to provide a 'production' implementation of a
- * DomainObjectRepository.
- */
-object FileBasedDomainObjectConfig {
-  var domainObjectDatabaseFileName = "data/domainObjectDatabase.csv"
-  lazy val domainObjectRepository = new FileBasedDomainObjectRepository
-}
-
-/**
- * InMemoryDomainObjectConfig is used to provide a test implementation of a
- * DomainObjectRepository.
- */
-object InMemoryDomainObjectConfig {
-  lazy val domainObjectRepository = new InMemoryDomainObjectRepository
 }
 
 /**
